@@ -67,7 +67,6 @@ void TimerCall::loop() {
 
 void TimerCall::initTaskInfo(TimerCallTaskInfo &info, unsigned long nowMillis) {
     info.lastExecMills = nowMillis;
-    info.nextExecMills = info.lastExecMills + info.interval;
     info.callCount = 0;
     info.lastElapsedMills = 0;
     info.totalElapsedMills = 0;
@@ -78,6 +77,5 @@ void TimerCall::updateInfo(TimerCallTaskInfo &info, unsigned long beforeExecMill
     info.lastElapsedMills = info.lastExecMills - beforeExecMillis;
 
     info.totalElapsedMills = info.totalElapsedMills + info.lastElapsedMills;
-    info.nextExecMills = info.lastExecMills + info.interval;
     info.callCount++;
 };

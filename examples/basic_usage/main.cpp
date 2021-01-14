@@ -18,7 +18,6 @@ void printStastics(std::vector<TimerCall::TimerCallTask> &tasks) {
         Serial.println(
            + "name=" + String(it->info.name)
            + " last=" + String(it->info.lastExecMills)
-           + " next=" + String(it->info.nextExecMills)
            + " last exec=" + String(it->info.lastElapsedMills)
            + " total=" + String(it->info.totalElapsedMills)
            + " count=" + String(it->info.callCount)
