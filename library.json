@@ -1,12 +1,12 @@
 {
-    "name": "TimerHandler",
+    "name": "TimerCall",
     "version": "0.1.0",
     "description": "Timer task execute helper library.",
     "keywords": "timer",
     "repository":
     {
       "type": "git",
-      "url": "https://github.com/yakumo-saki/TimerHandler"
+      "url": "https://github.com/yakumo-saki/TimerCall"
     },
     "authors":
     [
