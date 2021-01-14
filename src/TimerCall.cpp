@@ -1,12 +1,12 @@
 #include <Arduino.h>
-#include "TimerCall.hpp"
+#include "TimerCall.h"
 
 void TimerCall::add(TimerCallFunction f, String name, unsigned long intervalMs) {
 
     TimerCallTask task;
     task.func = f;
-    task.interval = intervalMs;
-    task.name = name;
+    task.info.interval = intervalMs;
+    task.info.name = name;
 
     this->tasks.push_back(task);
 };
@@ -14,21 +14,25 @@ void TimerCall::add(TimerCallFunction f, String name, unsigned long intervalMs) 
 void TimerCall::start() {
     Serial.println("start");
 
+    unsigned long now = millis();
+
     for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
-        Serial.println(it->interval);
-        it->lastExecMills=millis();
-        it->nextExecMills=it->lastExecMills + it->interval;
+        initTaskInfo(it->info, now);
+    }
+
+    for (auto it = this->statTasks.begin(), e = this->statTasks.end(); it != e; ++it) {
+        initTaskInfo(it->info, now);
     }
 };
 
-// void TimerCall::setStasticsFunction(TimerCallStatFunction f, unsigned long intervalMs = 5000) {
-//     TimerCallTask_t task;
-//     task.func = f;
-//     task.interval = intervalMs;
+void TimerCall::addStasticsFunction(TimerCallStatFunction f,  String name, unsigned long intervalMs = 5000) {
+    TimerCallStatTask task;
+    task.statFunc = f;
+    task.info.name = name;
+    task.info.interval = intervalMs;
 
-//     this->statTask = f;
-
-// }
+    this->statTasks.push_back(task);
+}
 
 void TimerCall::forceOnce() {
     Serial.println("forceOnce");
@@ -38,23 +42,42 @@ void TimerCall::forceOnce() {
 };
 
 void TimerCall::loop() {
+    // millisのオーバーフローしても大丈夫なコードにした。
+    // https://garretlab.web.fc2.com/arduino/lab/millis/
     for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
-        if (it->nextExecMills < millis()) {
+        unsigned long nowMillis = millis();
+        unsigned long elapsedMillis = nowMillis - it->info.lastExecMills;
+        if (it->info.interval < elapsedMillis) {
             unsigned beforeExecMillis = millis();
             it->func();
-            it->lastExecMills=millis();
-            it->lastElapsedMills = it->lastExecMills - beforeExecMillis;
+            this->updateInfo(it->info, beforeExecMillis, millis());
+        }
+    }
 
-            // 統計
-            it->totalElapsedMills = it->totalElapsedMills + it->lastElapsedMills;
-            it->nextExecMills=it->lastExecMills + it->interval;
-            it->callCount++;
+    for (auto it = this->statTasks.begin(), e = this->statTasks.end(); it != e; ++it) {
+        unsigned long nowMillis = millis();
+        unsigned long elapsedMillis = nowMillis - it->info.lastExecMills;
+        if (it->info.interval < elapsedMillis) {
+            unsigned long beforeExecMillis = millis();
+            it->statFunc(this->tasks);
+            this->updateInfo(it->info, beforeExecMillis, millis());
         }
     }
 };
 
-void TimerCall::dump() {
-    for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
-        Serial.println("last=" + String(it->lastExecMills) + " next=" + String(it->nextExecMills) + " now=" + String(millis()));
-    }
+void TimerCall::initTaskInfo(TimerCallTaskInfo &info, unsigned long nowMillis) {
+    info.lastExecMills = nowMillis;
+    info.nextExecMills = info.lastExecMills + info.interval;
+    info.callCount = 0;
+    info.lastElapsedMills = 0;
+    info.totalElapsedMills = 0;
+};
+
+void TimerCall::updateInfo(TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis) {
+    info.lastExecMills = nowMillis;
+    info.lastElapsedMills = info.lastExecMills - beforeExecMillis;
+
+    info.totalElapsedMills = info.totalElapsedMills + info.lastElapsedMills;
+    info.nextExecMills = info.lastExecMills + info.interval;
+    info.callCount++;
 };

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "TimerCall.hpp"
+#include "TimerCall.h"
 
 TimerCall tc = TimerCall();
 
@@ -11,24 +11,28 @@ void callbackB() {
   Serial.println("callbackB");
   delay(200);
 }
-void printStastics(std::vector<TimerCall::TimerCallTask_t> &tasks) {
+
+void printStastics(std::vector<TimerCall::TimerCallTask> &tasks) {
+    Serial.println("printStastics ------------------------");
     for (auto it = tasks.begin(), e = tasks.end(); it != e; ++it) {
         Serial.println(
-          "last=" + String(it->lastExecMills)
-           + " next=" + String(it->nextExecMills)
-           + " last exec=" + String(it->lastElapsedMills)
-           + " total=" + String(it->totalElapsedMills)
+           + "name=" + String(it->info.name)
+           + " last=" + String(it->info.lastExecMills)
+           + " next=" + String(it->info.nextExecMills)
+           + " last exec=" + String(it->info.lastElapsedMills)
+           + " total=" + String(it->info.totalElapsedMills)
+           + " count=" + String(it->info.callCount)
         );
     }
+    Serial.println("--------------------------------------");
 }
 
 void setup() {
   Serial.begin(9600);
 
-  // put your setup code here, to run once:
   tc.add(callbackA, "callbackA", 1000);
   tc.add(callbackB, "callbackB", 3500);
-  tc.setStasticsFunction(printStastics, 5000);
+  tc.addStasticsFunction(printStastics, "stat1", 5000);
   Serial.println("setup end");
   tc.start();
 }
