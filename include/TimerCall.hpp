@@ -8,22 +8,20 @@ class TimerCall
         typedef void (*TimerCallFunction)();
 
     public:
-        typedef void (*TimerCallStatFunction)(std::vector<TimerCall::TimerCallTask_t> &tasks);
 
-        typedef struct {
+        typedef struct TimerCallTask_s {
             String name;
             TimerCallFunction func;
-            TimerCallStatFunction statFunc;
             unsigned long lastExecMills;
             unsigned long nextExecMills;
             unsigned long lastElapsedMills;   // 実行した時間（前回）
             unsigned long totalElapsedMills;  // 実行した時間（合計）
             unsigned long callCount;
             unsigned long interval;
-        } TimerCallTask_t;
+        } TimerCallTask;
 
         void add(TimerCallFunction f, String name, unsigned long interval);
-        void setStasticsFunction(TimerCallStatFunction f, unsigned long interval = 5000);
+        // void setStasticsFunction(TimerCallStatFunction f, unsigned long interval = 5000);
         void start();
         void forceOnce();
         void loop();
@@ -32,7 +30,6 @@ class TimerCall
     protected:
         unsigned long nowMills;
         //   typedef void (*CallbackFunction)(Button2 &);
-        std::vector<TimerCallTask_t> tasks;
-        TimerCallStatFunction statTask;
-
+        std::vector<TimerCallTask> tasks;
+        // TimerCallStatFunction statTask;
 };

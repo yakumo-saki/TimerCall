@@ -3,7 +3,7 @@
 
 void TimerCall::add(TimerCallFunction f, String name, unsigned long intervalMs) {
 
-    TimerCallTask_t task;
+    TimerCallTask task;
     task.func = f;
     task.interval = intervalMs;
     task.name = name;
@@ -21,14 +21,14 @@ void TimerCall::start() {
     }
 };
 
-void TimerCall::setStasticsFunction(TimerCallStatFunction f, unsigned long intervalMs = 5000) {
-    TimerCallTask_t task;
-    task.func = f;
-    task.interval = intervalMs;
+// void TimerCall::setStasticsFunction(TimerCallStatFunction f, unsigned long intervalMs = 5000) {
+//     TimerCallTask_t task;
+//     task.func = f;
+//     task.interval = intervalMs;
 
-    this->statTask = f;
+//     this->statTask = f;
 
-}
+// }
 
 void TimerCall::forceOnce() {
     Serial.println("forceOnce");
