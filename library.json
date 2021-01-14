@@ -1,0 +1,25 @@
+{
+    "name": "TimerHandler",
+    "version": "0.1.0",
+    "description": "Timer task execute helper library.",
+    "keywords": "timer",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/yakumo-saki/TimerHandler"
+    },
+    "authors":
+    [
+      {
+        "name": "Yakumo Saki",
+        "email": "yakumo@ziomatrix.org",
+        "url": "https://github.com/yakumo-saki/"
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/yakumo-saki/TimerHandler",
+    "dependencies": {
+    },
+    "frameworks": "*",
+    "platforms": "arduino"
+  }
