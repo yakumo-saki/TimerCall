@@ -12,7 +12,16 @@ void TimerCall::add(TimerCallFunction f, String name, unsigned long intervalMs) 
 };
 
 void TimerCall::start() {
-    Serial.println("start");
+
+    if (this->started) {
+        return;  // 
+    }
+
+    this->restart();
+    this->started = true;
+};
+
+void TimerCall::restart() {
 
     unsigned long now = millis();
 
@@ -23,7 +32,8 @@ void TimerCall::start() {
     for (auto it = this->statTasks.begin(), e = this->statTasks.end(); it != e; ++it) {
         initTaskInfo(it->info, now);
     }
-};
+
+}
 
 void TimerCall::addStasticsFunction(TimerCallStatFunction f,  String name, unsigned long intervalMs = 5000) {
     TimerCallStatTask task;
@@ -35,7 +45,6 @@ void TimerCall::addStasticsFunction(TimerCallStatFunction f,  String name, unsig
 }
 
 void TimerCall::forceOnce() {
-    Serial.println("forceOnce");
     for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
         it->func();
     }

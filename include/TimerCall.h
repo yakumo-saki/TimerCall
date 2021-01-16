@@ -31,8 +31,18 @@ class TimerCall
 
         void add(TimerCallFunction f, String name, unsigned long interval);
         void addStasticsFunction(TimerCallStatFunction f, String name, unsigned long intervalinterval);
+        
+        // start timer (do nothing when timer is already started)
         void start();
+
+        // start timer (reset timer and start)
+        void restart();
+
+        // exec all tasks. (timer state not change)
         void forceOnce();
+
+        // exec task when timer duration reached
+        // call me at 
         void loop();
         void dump();
 
@@ -40,6 +50,7 @@ class TimerCall
         unsigned long nowMills;
         std::vector<TimerCallTask> tasks;
         std::vector<TimerCallStatTask> statTasks;
+        bool started = false;
 
         void initTaskInfo(TimerCallTaskInfo &info, unsigned long nowMillis);
         void updateInfo(TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis);
