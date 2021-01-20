@@ -7,7 +7,7 @@ see: https://github.com/yakumo-saki/TimerCall/blob/master/examples/basic_usage.c
 
 ## History
 
-### v0.2 2021/01/21
+### v0.2.0 2021/01/21
 
 * Add stastics hook.
 ### v0.1.1 2021/01/17
