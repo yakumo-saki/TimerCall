@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "TimerCall.h"
 
-void TimerCall::add(TimerCallFunction f, String name, unsigned long intervalMs) {
+void TimerCall::add(TimerCall::TimerCallFunction f, String name, unsigned long intervalMs) {
 
     TimerCallTask task;
     task.func = f;
@@ -35,7 +35,7 @@ void TimerCall::restart() {
 
 }
 
-void TimerCall::addStasticsFunction(TimerCallStatFunction f,  String name, unsigned long intervalMs = 5000) {
+void TimerCall::addStasticsFunction(TimerCall::TimerCallStatFunction f,  String name, unsigned long intervalMs = 5000) {
     TimerCallStatTask task;
     task.statFunc = f;
     task.info.name = name;
@@ -74,14 +74,14 @@ void TimerCall::loop() {
     }
 };
 
-void TimerCall::initTaskInfo(TimerCallTaskInfo &info, unsigned long nowMillis) {
+void TimerCall::initTaskInfo(TimerCall::TimerCallTaskInfo &info, unsigned long nowMillis) {
     info.lastExecMills = nowMillis;
     info.callCount = 0;
     info.lastElapsedMills = 0;
     info.totalElapsedMills = 0;
 };
 
-void TimerCall::updateInfo(TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis) {
+void TimerCall::updateInfo(TimerCall::TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis) {
     info.lastExecMills = nowMillis;
     info.lastElapsedMills = info.lastExecMills - beforeExecMillis;
 

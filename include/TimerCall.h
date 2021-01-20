@@ -8,6 +8,9 @@ class TimerCall
         typedef void (*TimerCallFunction)();
 
     public:
+        // Version of TimerCall. x.yz format.
+        const double VERSION = 0.2;
+
         typedef struct {
             String name;
             unsigned long lastExecMills;
@@ -18,19 +21,19 @@ class TimerCall
         } TimerCallTaskInfo;
 
         typedef struct {
-            TimerCallTaskInfo info;
-            TimerCallFunction func;
+            TimerCall::TimerCallTaskInfo info;
+            TimerCall::TimerCallFunction func;
         } TimerCallTask;
 
         typedef void (*TimerCallStatFunction)(std::vector<TimerCallTask> &tasks);
 
         typedef struct {
-            TimerCallTaskInfo info;
-            TimerCallStatFunction statFunc;
+            TimerCall::TimerCallTaskInfo info;
+            TimerCall::TimerCallStatFunction statFunc;
         } TimerCallStatTask;
 
-        void add(TimerCallFunction f, String name, unsigned long interval);
-        void addStasticsFunction(TimerCallStatFunction f, String name, unsigned long intervalinterval);
+        void add(TimerCall::TimerCallFunction f, String name, unsigned long interval);
+        void addStasticsFunction(TimerCall::TimerCallStatFunction f, String name, unsigned long intervalinterval);
         
         // start timer (do nothing when timer is already started)
         void start();
@@ -48,10 +51,10 @@ class TimerCall
 
     protected:
         unsigned long nowMills;
-        std::vector<TimerCallTask> tasks;
-        std::vector<TimerCallStatTask> statTasks;
+        std::vector<TimerCall::TimerCallTask> tasks;
+        std::vector<TimerCall::TimerCallStatTask> statTasks;
         bool started = false;
 
-        void initTaskInfo(TimerCallTaskInfo &info, unsigned long nowMillis);
-        void updateInfo(TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis);
+        void initTaskInfo(TimerCall::TimerCallTaskInfo &info, unsigned long nowMillis);
+        void updateInfo(TimerCall::TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis);
 };
