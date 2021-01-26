@@ -7,6 +7,10 @@ void TimerCall::add(TimerCall::TimerCallFunction f, String name, unsigned long i
     task.func = f;
     task.info.interval = intervalMs;
     task.info.name = name;
+    task.info.callCount = 0;
+    task.info.lastElapsedMills = 0;
+    task.info.lastExecMills = 0;
+    task.info.totalElapsedMills = 0;
 
     this->tasks.push_back(task);
 };
@@ -46,20 +50,27 @@ void TimerCall::addStasticsFunction(TimerCall::TimerCallStatFunction f,  String 
 
 void TimerCall::forceOnce() {
     for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
-        it->func();
+        this->runTask(*it);
+    }
+};
+
+void TimerCall::forceRunStasticsOnce() {
+    for (auto it = this->statTasks.begin(), e = this->statTasks.end(); it != e; ++it) {
+        this->runStatTask(*it);
     }
 };
 
 void TimerCall::loop() {
+    // startされていないなら何もしない
+    if (!this->started) return;
+
     // millisのオーバーフローしても大丈夫なコードにした。
     // https://garretlab.web.fc2.com/arduino/lab/millis/
     for (auto it = this->tasks.begin(), e = this->tasks.end(); it != e; ++it) {
         unsigned long nowMillis = millis();
         unsigned long elapsedMillis = nowMillis - it->info.lastExecMills;
         if (it->info.interval < elapsedMillis) {
-            unsigned beforeExecMillis = millis();
-            it->func();
-            this->updateInfo(it->info, beforeExecMillis, millis());
+            this->runTask(*it);
         }
     }
 
@@ -67,9 +78,7 @@ void TimerCall::loop() {
         unsigned long nowMillis = millis();
         unsigned long elapsedMillis = nowMillis - it->info.lastExecMills;
         if (it->info.interval < elapsedMillis) {
-            unsigned long beforeExecMillis = millis();
-            it->statFunc(this->tasks);
-            this->updateInfo(it->info, beforeExecMillis, millis());
+            this->runStatTask(*it);
         }
     }
 };
@@ -88,3 +97,15 @@ void TimerCall::updateInfo(TimerCall::TimerCallTaskInfo &info, unsigned long bef
     info.totalElapsedMills = info.totalElapsedMills + info.lastElapsedMills;
     info.callCount++;
 };
+
+void TimerCall::runTask(TimerCall::TimerCallTask task) {
+    unsigned beforeExecMillis = millis();
+    task.func();
+    this->updateInfo(task.info, beforeExecMillis, millis());
+}
+
+void TimerCall::runStatTask(TimerCall::TimerCallStatTask statTask) {
+    unsigned beforeExecMillis = millis();
+    statTask.statFunc(this->tasks);
+    this->updateInfo(statTask.info, beforeExecMillis, millis());
+}

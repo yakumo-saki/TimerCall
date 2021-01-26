@@ -9,7 +9,7 @@ class TimerCall
 
     public:
         // Version of TimerCall. x.yz format.
-        const double VERSION = 0.2;
+        const double VERSION = 0.3;
 
         typedef struct {
             String name;
@@ -44,6 +44,9 @@ class TimerCall
         // exec all tasks. (timer state not change)
         void forceOnce();
 
+        // run AllStastics once
+        void forceRunStasticsOnce();
+
         // exec task when timer duration reached
         // call me at 
         void loop();
@@ -57,4 +60,8 @@ class TimerCall
 
         void initTaskInfo(TimerCall::TimerCallTaskInfo &info, unsigned long nowMillis);
         void updateInfo(TimerCall::TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis);
+
+    private:
+        void runTask(TimerCall::TimerCallTask task);
+        void runStatTask(TimerCall::TimerCallStatTask statTask);
 };
