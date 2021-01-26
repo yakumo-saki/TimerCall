@@ -62,6 +62,6 @@ class TimerCall
         void updateInfo(TimerCall::TimerCallTaskInfo &info, unsigned long beforeExecMillis, unsigned long nowMillis);
 
     private:
-        void runTask(TimerCall::TimerCallTask task);
-        void runStatTask(TimerCall::TimerCallStatTask statTask);
+        void runTask(TimerCall::TimerCallTask& task);
+        void runStatTask(TimerCall::TimerCallStatTask& statTask);
 };

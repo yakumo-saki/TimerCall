@@ -4,11 +4,15 @@
 TimerCall tc = TimerCall();
 
 void callbackA() {
+  Serial.println("*****************************************************");
   Serial.println("callbackA");
+  Serial.println("*****************************************************");
   delay(100);
 }
 void callbackB() {
+  Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   Serial.println("callbackB");
+  Serial.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   delay(200);
 }
 
@@ -27,7 +31,7 @@ void printStastics(std::vector<TimerCall::TimerCallTask> &tasks) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(74880);
 
   tc.add(callbackA, "callbackA", 1000);
   tc.add(callbackB, "callbackB", 3500);
@@ -39,4 +43,5 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   tc.loop();
+  delay(100);
 }
