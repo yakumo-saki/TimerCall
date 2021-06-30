@@ -18,7 +18,7 @@ void TimerCall::add(TimerCall::TimerCallFunction f, String name, unsigned long i
 void TimerCall::start() {
 
     if (this->started) {
-        return;  // 
+        return; 
     }
 
     this->restart();
@@ -37,6 +37,15 @@ void TimerCall::restart() {
         initTaskInfo(it->info, now);
     }
 
+}
+
+void TimerCall::stop() {
+
+    if (!this->started) {
+        return;
+    }
+
+    this->started = false;
 }
 
 void TimerCall::addStasticsFunction(TimerCall::TimerCallStatFunction f,  String name, unsigned long intervalMs = 5000) {
@@ -60,7 +69,7 @@ void TimerCall::forceRunStasticsOnce() {
     }
 };
 
-void TimerCall::loop() {
+IRAM_ATTR void TimerCall::loop() {
     // startされていないなら何もしない
     if (!this->started) return;
 

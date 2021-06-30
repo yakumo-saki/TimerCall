@@ -9,7 +9,7 @@ class TimerCall
 
     public:
         // Version of TimerCall. x.yz format.
-        const double VERSION = 0.3;
+        const double VERSION = 0.4;
 
         typedef struct {
             String name;
@@ -38,17 +38,23 @@ class TimerCall
         // start timer (do nothing when timer is already started)
         void start();
 
-        // start timer (reset timer and start)
+        // restart timer (reset timer and start)
         void restart();
 
-        // exec all tasks. (timer state not change)
+        // stop timer (no reset) 
+        // Nothing happens when timer not started
+        void stop();
+
+        /** exec all tasks. (timer state not change) */
         void forceOnce();
 
-        // run AllStastics once
+        /** run AllStastics once */
         void forceRunStasticsOnce();
 
-        // exec task when timer duration reached
-        // call me at 
+        /**
+         * exec task when timer duration reached
+         * call me at loop()
+         */
         void loop();
         void dump();
 
