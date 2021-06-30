@@ -1,6 +1,6 @@
 {
     "name": "TimerCall",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Simple timer task execute helper library.",
     "keywords": "timer",
     "repository":
