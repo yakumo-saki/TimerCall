@@ -7,6 +7,15 @@ see: [basic_usage.cpp](./examples/basic_usage.cpp)
 
 ## History
 
+### v0.4.1 2023/12/31
+
+* Fix compile error caused by std::vector
+* Add platformio.ini sample for ESP32-8048S050 (ESP32-S3)
+
+### v0.4.0 2021/06/20
+
+* Missing log. maybe bump version.
+
 ### v0.3.0 2021/01/26
 
 * License is now apache-2.0
